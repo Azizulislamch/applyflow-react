@@ -95,19 +95,15 @@ function App() {
       <FilterButtons activeFilter={filter} setFilter={setFilter} />
 
       <main className="space-y-6">
-        {filteredJobs.length > 0 ? (
-          filteredJobs.map(job => (
-            <JobCard
-              key={job.id}
-              job={job}
-              onDelete={deleteJob}
-              onStatusUpdate={updateStatus}
-              onEdit={() => setEditingJob(job)}
-            />
-          ))
-        ) : (
-          <p className="text-center text-gray-500 py-10">No jobs found in this category.</p>
-        )}
+        {filteredJobs.map(job => (
+          <JobCard
+            key={job.id}
+            job={job}
+            onDelete={deleteJob}
+            onStatusUpdate={updateStatus}
+            onSubmitEdit={addOrUpdateJob}
+          />
+        ))}
       </main>
     </div>
   );

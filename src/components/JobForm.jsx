@@ -1,9 +1,17 @@
 import { useState, useEffect } from 'react';
 
 const JobForm = ({ onSubmit, editingJob, setEditingJob }) => {
-    const [formData, setFormData] = useState({
-        company: '', title: '', location: '', type: '', salary: '', desc: ''
-    });
+    
+    const initialState = {
+        company: '',
+        title: '',
+        location: '',
+        type: 'Full Time',
+        salary: '',
+        desc: ''
+    };
+
+    const [formData, setFormData] = useState(initialState);
 
     useEffect(() => {
         if (editingJob) setFormData(editingJob);
@@ -11,64 +19,62 @@ const JobForm = ({ onSubmit, editingJob, setEditingJob }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
         onSubmit(formData);
-        setFormData({ company: '', title: '', location: '', type: '', salary: '', desc: '' });
+
+        setFormData(initialState);
+
+        if (editingJob) setEditingJob(null);
     };
 
     return (
-        <section className="bg-white rounded-xl shadow p-6 mb-10">
+        <section className="bg-white rounded-xl shadow p-6 mb-10 border border-gray-100">
             <h2 className="text-xl font-bold text-sky-900 mb-4">
-                {editingJob ? "Edit Job" : "Add New Job"}
+                {editingJob ? "📝 Edit Job Details" : "➕ Add New Job"}
             </h2>
             <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <input
                     value={formData.company}
                     onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                    type="text" placeholder="Company Name" className="border rounded-lg px-4 py-2" required
+                    type="text" placeholder="Company Name" className="border rounded-lg px-4 py-2 focus:ring-2 focus:ring-sky-500 outline-none" required
                 />
                 <input
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    type="text" placeholder="Job Title" className="border rounded-lg px-4 py-2" required
+                    type="text" placeholder="Job Title" className="border rounded-lg px-4 py-2 focus:ring-2 focus:ring-sky-500 outline-none" required
                 />
                 <input
                     value={formData.location}
                     onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                    type="text" placeholder="Location (e.g. Dhaka, Remote)" className="border rounded-lg px-4 py-2"
+                    type="text" placeholder="Location" className="border rounded-lg px-4 py-2 focus:ring-2 focus:ring-sky-500 outline-none"
                 />
-                {/* <input
-                    value={formData.type}
-                    onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                    type="text" placeholder="Job Type (e.g. Full Time)" className="border rounded-lg px-4 py-2"
-                /> */}
+
+                {/* Dropdown for Job Type */}
                 <select
                     value={formData.type}
                     onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                    className="border rounded-lg px-4 py-2 bg-white"
+                    className="border rounded-lg px-4 py-2 bg-white focus:ring-2 focus:ring-sky-500 outline-none"
                 >
-                    <option value="">Select Job Type</option>
                     <option value="Full Time">Full Time</option>
                     <option value="Part Time">Part Time</option>
                     <option value="Remote">Remote</option>
                     <option value="Contract">Contract</option>
                 </select>
+
                 <input
                     value={formData.salary}
                     onChange={(e) => setFormData({ ...formData, salary: e.target.value })}
-                    type="text" placeholder="Salary Range" className="border rounded-lg px-4 py-2"
+                    type="text" placeholder="Salary Range" className="border rounded-lg px-4 py-2 focus:ring-2 focus:ring-sky-500 outline-none"
                 />
                 <textarea
                     value={formData.desc}
                     onChange={(e) => setFormData({ ...formData, desc: e.target.value })}
-                    placeholder="Job Description" className="border rounded-lg px-4 py-2 md:col-span-2"
+                    placeholder="Short Description" className="border rounded-lg px-4 py-2 md:col-span-2 focus:ring-2 focus:ring-sky-500 outline-none"
                 ></textarea>
 
-                <button type="submit" className="md:col-span-2 bg-sky-500 text-white py-2 rounded-xl font-medium hover:bg-sky-600 transition">
-                    {editingJob ? "Update Job" : "Add Job"}
+                <button type="submit" className="md:col-span-2 bg-sky-500 text-white py-2 rounded-xl font-bold hover:bg-sky-600 transition shadow-md">
+                    {editingJob ? "Update Job Info" : "Add Job to List"}
                 </button>
-                {editingJob && (
-                    <button type="button" onClick={() => setEditingJob(null)} className="md:col-span-2 text-gray-500 underline">Cancel Edit</button>
-                )}
             </form>
         </section>
     );

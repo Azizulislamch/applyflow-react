@@ -1,8 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import Header from "./components/Header";
 import JobForm from "./components/JobForm";
-import JobList from "./components/JobList";
-import Filter from "./components/Filter";
+import JobCard from "./components/JobCard";
+import FilterButtons from "./components/FilterButtons";
+import SummaryCards from "./components/SummaryCards";
+
 
 const defaultJobs = [
   {
@@ -29,63 +31,84 @@ const defaultJobs = [
 
 function App() {
   const [jobs, setJobs] = useState([]);
-  const [filter, setFilter] = useState("all");
+  const [filter, setFilter] = useState('All');
+  const [editingJob, setEditingJob] = useState(null);
 
-  // LOAD
+  // Load Data from Local Storage
   useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem("jobs"));
-    if (saved && saved.length > 0) {
-      setJobs(saved);
+    const savedJobs = JSON.parse(localStorage.getItem('jobs'));
+    
+    if (savedJobs && savedJobs.length > 0) {
+      setJobs(savedJobs);
     } else {
       setJobs(defaultJobs);
     }
   }, []);
 
-  // SAVE
+  // Save Data in Local Storage 
   useEffect(() => {
-    localStorage.setItem("jobs", JSON.stringify(jobs));
+    if (jobs.length > 0) {
+      localStorage.setItem('jobs', JSON.stringify(jobs));
+    }
   }, [jobs]);
 
-  // CREATE
-  const addJob = (job) => {
-    setJobs([...jobs, { ...job, id: Date.now(), status: "pending" }]);
+  // Create & Update
+  const addOrUpdateJob = (jobData) => {
+    if (editingJob) {
+      setJobs(jobs.map(job => job.id === editingJob.id ? { ...jobData, id: job.id } : job));
+      setEditingJob(null);
+    } else {
+      const newJob = { ...jobData, id: Date.now(), status: 'pending' };
+      setJobs([newJob, ...jobs]);
+    }
   };
 
-  // DELETE
+  // Status Update
+  const updateStatus = (id, newStatus) => {
+    setJobs(jobs.map(job => job.id === id ? { ...job, status: newStatus } : job));
+  };
+
+  // Job Delete
   const deleteJob = (id) => {
-    setJobs(jobs.filter((job) => job.id !== id));
+    if (window.confirm("Are you sure you want to delete this job?")) {
+      setJobs(jobs.filter(job => job.id !== id));
+    }
   };
 
-  // UPDATE STATUS
-  const updateStatus = (id, status) => {
-    setJobs(
-      jobs.map((job) =>
-        job.id === id ? { ...job, status } : job
-      )
-    );
-  };
-
-  // EDIT
-  const editJob = (updatedJob) => {
-    setJobs(
-      jobs.map((job) =>
-        job.id === updatedJob.id ? updatedJob : job
-      )
-    );
-  };
+  // Filter Jobs
+  const filteredJobs = jobs.filter(job => 
+    filter === 'All' ? true : job.status.toLowerCase() === filter.toLowerCase()
+  );
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">
-      <Header jobs={jobs} />
-      <JobForm addJob={addJob} />
-      <Filter setFilter={setFilter} />
-      <JobList
-        jobs={jobs}
-        filter={filter}
-        deleteJob={deleteJob}
-        updateStatus={updateStatus}
-        editJob={editJob}
+      <Header />
+      
+      <SummaryCards jobs={jobs} />
+      
+      <JobForm 
+        onSubmit={addOrUpdateJob} 
+        editingJob={editingJob} 
+        setEditingJob={setEditingJob} 
       />
+
+      <FilterButtons activeFilter={filter} setFilter={setFilter} />
+
+      <main className="space-y-6">
+        {filteredJobs.length > 0 ? (
+          filteredJobs.map(job => (
+            <JobCard 
+              key={job.id} 
+              job={job} 
+              onDelete={deleteJob} 
+              onStatusUpdate={updateStatus} 
+              onEdit={() => setEditingJob(job)}
+            />
+          ))
+        ) : (
+          <p className="text-center text-gray-500 py-10">No jobs found in this category.</p>
+        )}
+      </main>
     </div>
   );
 }

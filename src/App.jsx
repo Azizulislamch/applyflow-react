@@ -37,7 +37,7 @@ function App() {
   // Load Data from Local Storage
   useEffect(() => {
     const savedJobs = JSON.parse(localStorage.getItem('jobs'));
-    
+
     if (savedJobs && savedJobs.length > 0) {
       setJobs(savedJobs);
     } else {
@@ -76,20 +76,20 @@ function App() {
   };
 
   // Filter Jobs
-  const filteredJobs = jobs.filter(job => 
+  const filteredJobs = jobs.filter(job =>
     filter === 'All' ? true : job.status.toLowerCase() === filter.toLowerCase()
   );
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">
       <Header />
-      
+
       <SummaryCards jobs={jobs} />
-      
-      <JobForm 
-        onSubmit={addOrUpdateJob} 
-        editingJob={editingJob} 
-        setEditingJob={setEditingJob} 
+
+      <JobForm
+        onSubmit={addOrUpdateJob}
+        editingJob={editingJob}
+        setEditingJob={setEditingJob}
       />
 
       <FilterButtons activeFilter={filter} setFilter={setFilter} />
@@ -97,11 +97,11 @@ function App() {
       <main className="space-y-6">
         {filteredJobs.length > 0 ? (
           filteredJobs.map(job => (
-            <JobCard 
-              key={job.id} 
-              job={job} 
-              onDelete={deleteJob} 
-              onStatusUpdate={updateStatus} 
+            <JobCard
+              key={job.id}
+              job={job}
+              onDelete={deleteJob}
+              onStatusUpdate={updateStatus}
               onEdit={() => setEditingJob(job)}
             />
           ))

@@ -35,7 +35,7 @@ This project demonstrates practical implementation of CRUD operations, state man
 
 | Dashboard Overview | Mobile Responsive View |
 | :--- | :--- |
-| <img width="1589" height="855" alt="image" src="https://github.com/user-attachments/assets/021e015f-1291-4f4b-a2d7-19cb3f63ebc1" /> | ![mobile](https://github.com/user-attachments/assets/7ad4471d-10fb-40c4-8000-e98aa0c4c9ce) |
+| <img src="https://github.com/user-attachments/assets/021e015f-1291-4f4b-a2d7-19cb3f63ebc1" width="600"/> | <img src="https://github.com/user-attachments/assets/7ad4471d-10fb-40c4-8000-e98aa0c4c9ce" width="200"/> |
 
 ---
 

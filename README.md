@@ -5,7 +5,7 @@ It helps users efficiently track, manage, and organize their job applications in
 
 This project demonstrates practical implementation of CRUD operations, state management, and local storage persistence in a real-world application.
 
-**🌐 Live Demo:** [https://applyflow-react.vercel.app/](https://applyflow-react.vercel.app/)
+**🌐 Live Link:** [https://applyflow-react.vercel.app/](https://applyflow-react.vercel.app/)
 
 ---
 
